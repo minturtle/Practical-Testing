@@ -113,6 +113,20 @@ public class CafeKioskTest {
                 .hasMessage("주문 가능 시간이 아닙니다.");
     }
 
+    @Test
+    @DisplayName("Happy Case::CalculateTotalPrice 테스트")
+    void t8() throws Exception {
+        //given
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        cafeKiosk.add(americano);
+        //when
+        int totalPrice = cafeKiosk.calculateTotalPractice();
+        //then
+        assertThat(totalPrice).isEqualTo(americano.getPrice());
+    }
+
 }
 
 
