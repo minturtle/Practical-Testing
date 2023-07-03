@@ -1,5 +1,6 @@
 package sample.cafekiosk.spring.unit;
 
+import lombok.Getter;
 import sample.cafekiosk.spring.unit.beverages.Beverage;
 import sample.cafekiosk.spring.unit.order.Order;
 
@@ -7,6 +8,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class CafeKiosk {
 
     private final List<Beverage> beverages = new ArrayList<>();
