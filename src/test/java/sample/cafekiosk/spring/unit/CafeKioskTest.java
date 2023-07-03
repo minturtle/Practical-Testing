@@ -16,7 +16,7 @@ public class CafeKioskTest {
 
 
     @Test
-    @DisplayName("add Test")
+    @DisplayName("키오스크에 음료를 1개 추가하면 주문목록에 담긴다.")
     void t1() throws Exception {
         CafeKiosk cafeKiosk = new CafeKiosk();
 
@@ -28,7 +28,7 @@ public class CafeKioskTest {
     }
 
     @Test
-    @DisplayName("remove test")
+    @DisplayName("키오스크에 추가한 음료를 삭제하면 주문 목록에서 제거된다.")
     void t2() throws Exception {
         CafeKiosk cafeKiosk = new CafeKiosk();
 
@@ -43,7 +43,7 @@ public class CafeKioskTest {
 
 
     @Test
-    @DisplayName("clear test")
+    @DisplayName("키오스크에 지금까지 담은 음료들을 모두 지우면 주문 목록이 초기화 된다.")
     void t3() throws Exception {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Latte latte = new Latte();
@@ -59,7 +59,7 @@ public class CafeKioskTest {
     }
 
     @Test
-    @DisplayName("add test: 하나의 음료 여러잔")
+    @DisplayName("하나의 음료에 대해 여러 잔을 추가해 주문 목록에 여러잔을 한번에 추가할 수 있다.")
     void t4() throws Exception {
         final CafeKiosk cafeKiosk = new CafeKiosk();
 
@@ -73,7 +73,7 @@ public class CafeKioskTest {
     }
 
     @Test
-    @DisplayName("add test: 하나의 음료 여러잔 : 0이하인 경우")
+    @DisplayName("하나의 음료에 대해 0 이하의 잔은 추가할 수 없다.")
     void t5() throws Exception {
         final CafeKiosk cafeKiosk = new CafeKiosk();
 
@@ -84,7 +84,7 @@ public class CafeKioskTest {
 
     @ParameterizedTest
     @CsvSource(value = {"10,00", "22,00"}, delimiter=',')
-    @DisplayName("CreateOrder Test")
+    @DisplayName("영업시간내에 주문을 해 주문을 생성할 수 있다.")
     void t6(int hour, int min) throws Exception {
 
         final CafeKiosk cafeKiosk = new CafeKiosk();
@@ -101,7 +101,7 @@ public class CafeKioskTest {
 
     @ParameterizedTest
     @CsvSource(value = {"9,59", "22,01"})
-    @DisplayName("Exception Case::Create Order test Out Of Time")
+    @DisplayName("영업시간 외에는 주문을 할 수 없다.")
     void t7(int hour, int min) throws Exception {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
@@ -114,7 +114,7 @@ public class CafeKioskTest {
     }
 
     @Test
-    @DisplayName("Happy Case::CalculateTotalPrice 테스트")
+    @DisplayName("지금까지 담은 음료의 총 가격을 계산해 알 수 있다.")
     void t8() throws Exception {
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
