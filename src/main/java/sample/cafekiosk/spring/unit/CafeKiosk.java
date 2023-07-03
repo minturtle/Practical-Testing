@@ -41,12 +41,8 @@ public class CafeKiosk {
     }
 
     public int calculateTotalPractice() {
-        int totalPrice = 0;
-        for(int i = 0; i < beverages.size(); i++){
-            totalPrice += beverages.get(i).getPrice();
-        }
-
-        return totalPrice;
+        return beverages.stream()
+                .mapToInt(Beverage::getPrice).sum();
     }
 
     public Order createOrder(LocalTime now){
