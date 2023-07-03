@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.spring.unit.beverages.Americano;
 import sample.cafekiosk.spring.unit.beverages.Latte;
+import sample.cafekiosk.spring.unit.order.Order;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -76,4 +77,22 @@ public class CafeKioskTest {
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Count는 0이하일 수 없습니다.");
     }
+
+    @Test
+    @DisplayName("CreateOrder Test")
+    void t6() throws Exception {
+        final CafeKiosk cafeKiosk = new CafeKiosk();
+        final Americano americano = new Americano();
+
+        cafeKiosk.add(americano);
+
+        final Order order = cafeKiosk.createOrder();
+
+        assertThat(order.getBeverages()).hasSize(1);
+        assertThat(order.getBeverages()).containsExactly(americano);
+    }
+
+
 }
+
+
