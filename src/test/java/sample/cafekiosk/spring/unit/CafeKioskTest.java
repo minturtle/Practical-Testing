@@ -2,11 +2,14 @@ package sample.cafekiosk.spring.unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import sample.cafekiosk.spring.unit.beverages.Americano;
 import sample.cafekiosk.spring.unit.beverages.Latte;
 import sample.cafekiosk.spring.unit.order.Order;
 
 import java.time.LocalTime;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -80,20 +83,34 @@ public class CafeKioskTest {
                 .hasMessage("Count는 0이하일 수 없습니다.");
     }
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {"10,00", "22,00"}, delimiter=',')
     @DisplayName("CreateOrder Test")
-    void t6() throws Exception {
+    void t6(int hour, int min) throws Exception {
+
         final CafeKiosk cafeKiosk = new CafeKiosk();
         final Americano americano = new Americano();
 
         cafeKiosk.add(americano);
 
-        final Order order = cafeKiosk.createOrder(LocalTime.of(10, 00));
+        final Order order = cafeKiosk.createOrder(LocalTime.of(hour, min));
 
         assertThat(order.getBeverages()).hasSize(1);
         assertThat(order.getBeverages()).containsExactly(americano);
     }
 
+
+    @Test
+    @DisplayName("Exception Case::Create Order test Out Of Time")
+    void t7() throws Exception {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        cafeKiosk.add(americano);
+
+        Order order = cafeKiosk.createOrder(LocalTime.of(9, 59));
+
+    }
 
 }
 
