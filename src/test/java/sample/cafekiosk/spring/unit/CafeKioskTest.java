@@ -52,4 +52,20 @@ public class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages()).isEmpty();
 
     }
+
+    @Test
+    @DisplayName("add test: 하나의 음료 여러잔")
+    void t4() throws Exception {
+        final CafeKiosk cafeKiosk = new CafeKiosk();
+
+        final Americano americano = new Americano();
+        cafeKiosk.add(americano, 2);
+
+        assertThat(cafeKiosk.getBeverages()).hasSize(2);
+
+        assertThat(cafeKiosk.getBeverages().get(0)).isEqualTo(americano);
+        assertThat(cafeKiosk.getBeverages().get(1)).isEqualTo(americano);
+    }
+
+
 }
