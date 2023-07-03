@@ -20,4 +20,19 @@ public class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages().get(0).getName()).isEqualTo("아메리카노");
 
     }
+
+    @Test
+    @DisplayName("remove test")
+    void t2() throws Exception {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+
+        Americano beverage = new Americano();
+        cafeKiosk.add(beverage);
+
+        cafeKiosk.remove(beverage);
+
+        assertThat(cafeKiosk.getBeverages()).isEmpty();
+
+    }
+
 }
