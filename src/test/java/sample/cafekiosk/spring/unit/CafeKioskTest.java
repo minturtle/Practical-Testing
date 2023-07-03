@@ -6,6 +6,8 @@ import sample.cafekiosk.spring.unit.beverages.Americano;
 import sample.cafekiosk.spring.unit.beverages.Latte;
 import sample.cafekiosk.spring.unit.order.Order;
 
+import java.time.LocalTime;
+
 import static org.assertj.core.api.Assertions.*;
 
 public class CafeKioskTest {
@@ -86,7 +88,7 @@ public class CafeKioskTest {
 
         cafeKiosk.add(americano);
 
-        final Order order = cafeKiosk.createOrder();
+        final Order order = cafeKiosk.createOrder(LocalTime.of(10, 00));
 
         assertThat(order.getBeverages()).hasSize(1);
         assertThat(order.getBeverages()).containsExactly(americano);

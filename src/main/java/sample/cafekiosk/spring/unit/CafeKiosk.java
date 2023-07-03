@@ -46,8 +46,7 @@ public class CafeKiosk {
         return totalPrice;
     }
 
-    public Order createOrder(){
-        LocalTime now = LocalTime.now();
+    public Order createOrder(LocalTime now){
 
         if(now.isBefore(SHOP_OPEN_TIME) || now.isAfter(SHOP_CLOSE_TIME)){
             throw new IllegalArgumentException("주문 가능 시간이 아닙니다.");
