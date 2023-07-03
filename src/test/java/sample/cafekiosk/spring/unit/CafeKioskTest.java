@@ -108,7 +108,7 @@ public class CafeKioskTest {
 
         cafeKiosk.add(americano);
 
-        assertThatThrownBy(()->cafeKiosk.createOrder(LocalTime.of(9, 59)))
+        assertThatThrownBy(()->cafeKiosk.createOrder(LocalTime.of(hour, min)))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("주문 가능 시간이 아닙니다.");
     }
