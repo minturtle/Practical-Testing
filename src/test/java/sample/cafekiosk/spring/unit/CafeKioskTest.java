@@ -67,5 +67,13 @@ public class CafeKioskTest {
         assertThat(cafeKiosk.getBeverages().get(1)).isEqualTo(americano);
     }
 
+    @Test
+    @DisplayName("add test: 하나의 음료 여러잔 : 0이하인 경우")
+    void t5() throws Exception {
+        final CafeKiosk cafeKiosk = new CafeKiosk();
 
+        assertThatThrownBy(()->cafeKiosk.add(new Americano(), 0))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Count는 0이하일 수 없습니다.");
+    }
 }
