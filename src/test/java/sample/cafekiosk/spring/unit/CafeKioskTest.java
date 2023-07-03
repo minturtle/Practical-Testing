@@ -9,7 +9,6 @@ import sample.cafekiosk.spring.unit.beverages.Latte;
 import sample.cafekiosk.spring.unit.order.Order;
 
 import java.time.LocalTime;
-import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -100,16 +99,18 @@ public class CafeKioskTest {
     }
 
 
-    @Test
+    @ParameterizedTest
+    @CsvSource(value = {"9,59", "22,01"})
     @DisplayName("Exception Case::Create Order test Out Of Time")
-    void t7() throws Exception {
+    void t7(int hour, int min) throws Exception {
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
 
         cafeKiosk.add(americano);
 
-        Order order = cafeKiosk.createOrder(LocalTime.of(9, 59));
-
+        assertThatThrownBy(()->cafeKiosk.createOrder(LocalTime.of(9, 59)))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("주문 가능 시간이 아닙니다.");
     }
 
 }
