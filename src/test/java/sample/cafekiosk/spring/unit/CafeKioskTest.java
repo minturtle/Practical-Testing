@@ -3,6 +3,7 @@ package sample.cafekiosk.spring.unit;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.spring.unit.beverages.Americano;
+import sample.cafekiosk.spring.unit.beverages.Latte;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -35,4 +36,20 @@ public class CafeKioskTest {
 
     }
 
+
+    @Test
+    @DisplayName("clear test")
+    void t3() throws Exception {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Latte latte = new Latte();
+        Americano americano = new Americano();
+
+        cafeKiosk.add(latte);
+        cafeKiosk.add(americano);
+
+        cafeKiosk.clear();
+
+        assertThat(cafeKiosk.getBeverages()).isEmpty();
+
+    }
 }
