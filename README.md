@@ -22,6 +22,7 @@ https://flannel-dill-7dc.notion.site/Practical-Testing-1-fa9df73a897c4cd19f59686
 ### Prodution Code
 
 - 주문 목록에 음료 추가/삭제 기능
+- 한 종류의 음료 여러 잔을 한번에 담는 기능
 - 주문 목록 전체 지우기
 - 주문 목록 총 금액 계산하기
 - 주문 생성하기
