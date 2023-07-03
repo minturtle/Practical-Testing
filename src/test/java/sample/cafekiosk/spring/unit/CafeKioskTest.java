@@ -119,12 +119,16 @@ public class CafeKioskTest {
         //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
+        Latte latte = new Latte();
 
         cafeKiosk.add(americano);
+        cafeKiosk.add(latte);
         //when
         int totalPrice = cafeKiosk.calculateTotalPractice();
+        int expected = americano.getPrice() + latte.getPrice();
+
         //then
-        assertThat(totalPrice).isEqualTo(americano.getPrice());
+        assertThat(totalPrice).isEqualTo(expected);
     }
 
 }
