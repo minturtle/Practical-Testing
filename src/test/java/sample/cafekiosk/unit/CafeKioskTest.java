@@ -1,12 +1,12 @@
-package sample.cafekiosk.spring.unit;
+package sample.cafekiosk.unit;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import sample.cafekiosk.spring.unit.beverages.Americano;
-import sample.cafekiosk.spring.unit.beverages.Latte;
-import sample.cafekiosk.spring.unit.order.Order;
+import sample.cafekiosk.unit.beverages.Americano;
+import sample.cafekiosk.unit.beverages.Latte;
+import sample.cafekiosk.unit.order.Order;
 
 import java.time.LocalTime;
 

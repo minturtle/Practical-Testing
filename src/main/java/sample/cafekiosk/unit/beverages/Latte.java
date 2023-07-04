@@ -1,4 +1,4 @@
-package sample.cafekiosk.spring.unit.beverages;
+package sample.cafekiosk.unit.beverages;
 
 public class Latte implements Beverage{
 
