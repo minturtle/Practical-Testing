@@ -27,3 +27,10 @@ https://flannel-dill-7dc.notion.site/Practical-Testing-1-fa9df73a897c4cd19f59686
 - 주문 목록 총 금액 계산하기
 - 주문 생성하기
 
+--- 
+
+### Spring Production Code
+
+- 키오스크 주문을 위한 상품 후보 리스트 조회하기
+- 상품의 판매 상태 : 판매중, 판매 보류, 판매 중지 : 판매중, 판매 보류인 상품을 보여준다.
+- id, 상품 번호, 상품 타입, 판매 상태, 상품 이름, 가격
