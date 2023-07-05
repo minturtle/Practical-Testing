@@ -30,7 +30,7 @@ class OrderServiceTest {
 
 
     @Test
-    @DisplayName("주문번호 리스트를 받아 주문을 생성한다")
+    @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
     void t1() throws Exception {
         //given
         final List<Product> dummyData = getDummyData();

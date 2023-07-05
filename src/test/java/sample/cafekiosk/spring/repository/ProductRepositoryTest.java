@@ -40,7 +40,23 @@ class ProductRepositoryTest {
                 );
     }
 
+    @Test
+    @DisplayName("Product Number 리스트로 여러개의 Product를 한번에 조회할 수 있다.")
+    void t2() throws Exception {
+        //given
+        productRepository.saveAll(getDummyData());
 
+        List<String> productNumbers = List.of("001", "002");
+
+        //when
+        List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
+
+        //then
+        assertThat(products).hasSize(2)
+                .extracting("name")
+                .containsExactlyInAnyOrder("아메리카노", "크로와상");
+
+    }
 
     private List<Product> getDummyData(){
         Product product1 = Product.builder()
