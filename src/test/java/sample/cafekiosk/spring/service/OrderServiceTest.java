@@ -48,7 +48,8 @@ class OrderServiceTest {
 
         assertThat(orderResponse.getId()).isNotNull();
 
-        assertThat(orderResponse.getTotalPrice()).isEqualTo(6500);
+        assertThat(orderResponse).extracting("totalPrice", "orderDateTime")
+                        .containsExactly(6500, orderTime);
 
         assertThat(orderResponse.getProducts()).hasSize(2)
                 .extracting("productNumber")

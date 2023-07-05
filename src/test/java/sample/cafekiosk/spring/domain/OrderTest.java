@@ -27,7 +27,7 @@ public class OrderTest {
 
 
     @Test
-    @DisplayName("상품 리스트과 주문 날짜를 기반으로 주문을 생성할 수 있다.")
+    @DisplayName("상품 리스트과 주문 날짜를 기반으로 주문을 생성할 수 있다. 생성된 주문의 status는 INIT이다.")
     void t2() throws Exception {
         //given
         final List<Product> dummyData = getDummyData();

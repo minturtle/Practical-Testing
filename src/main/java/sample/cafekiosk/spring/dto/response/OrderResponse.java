@@ -13,7 +13,7 @@ public class OrderResponse {
 
     private Long id;
     private int totalPrice;
-    private LocalDateTime localDateTime;
+    private LocalDateTime orderDateTime;
     private List<ProductResponse> products;
 
 }
