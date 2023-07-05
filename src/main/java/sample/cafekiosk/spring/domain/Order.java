@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
 @Entity
 public class Order {
 
-    public static Order of(List<Product> products){
+    public static Order of(List<Product> products, LocalDateTime orderTime){
         // create Order
         Order order = new Order();
 
         //set Values
         order.orderStatus = OrderStatus.INIT;
         order.totalPrice = calculateTotalPrice(products);
-        order.orderTime = LocalDateTime.now();
+        order.orderTime = orderTime;
         order.orderProducts = products.stream().map(product ->
             OrderProduct.builder()
                     .product(product)

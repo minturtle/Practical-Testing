@@ -4,6 +4,7 @@ package sample.cafekiosk.spring.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -17,13 +18,26 @@ public class OrderTest {
     void t1() throws Exception {
         //given
         final List<Product> dummyData = getDummyData();
+        final LocalDateTime orderTime = LocalDateTime.now();
         //when
-        Order order = Order.of(dummyData);
+        Order order = Order.of(dummyData,orderTime);
         //then
         assertThat(order.getTotalPrice()).isEqualTo(11000);
-
     }
 
+
+    @Test
+    @DisplayName("상품 리스트과 주문 날짜를 기반으로 주문을 생성할 수 있다.")
+    void t2() throws Exception {
+        //given
+        final List<Product> dummyData = getDummyData();
+        final LocalDateTime orderTime = LocalDateTime.now();
+        //when
+        Order order = Order.of(dummyData,orderTime);
+        //then
+        assertThat(order).extracting("totalPrice", "orderTime","orderStatus")
+                .containsExactlyInAnyOrder(11000, orderTime, OrderStatus.INIT);
+    }
 
 
     private List<Product> getDummyData(){

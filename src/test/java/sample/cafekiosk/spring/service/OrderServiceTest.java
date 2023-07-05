@@ -14,6 +14,7 @@ import sample.cafekiosk.spring.repository.ProductRepository;
 import sample.cafekiosk.spring.dto.request.OrderCreateRequest;
 import sample.cafekiosk.spring.dto.response.OrderResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -34,6 +35,7 @@ class OrderServiceTest {
     void t1() throws Exception {
         //given
         final List<Product> dummyData = getDummyData();
+        final LocalDateTime orderTime = LocalDateTime.now();
         productRepository.saveAll(dummyData);
 
         OrderCreateRequest reqBody = OrderCreateRequest.builder()
@@ -41,14 +43,12 @@ class OrderServiceTest {
                 .build();
 
         //when
-        OrderResponse orderResponse = orderService.createOrder(reqBody);
+        OrderResponse orderResponse = orderService.createOrder(reqBody, orderTime);
         //then
 
         assertThat(orderResponse.getId()).isNotNull();
 
         assertThat(orderResponse.getTotalPrice()).isEqualTo(6500);
-
-        assertThat(orderResponse.getLocalDateTime()).isNotNull();
 
         assertThat(orderResponse.getProducts()).hasSize(2)
                 .extracting("productNumber")
