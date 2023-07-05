@@ -9,12 +9,37 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "orders")
 @Entity
 public class Order {
+
+    public static Order of(List<Product> products){
+        // create Order
+        Order order = new Order();
+
+        //set Values
+        order.orderStatus = OrderStatus.INIT;
+        order.totalPrice = calculateTotalPrice(products);
+        order.orderTime = LocalDateTime.now();
+        order.orderProducts = products.stream().map(product ->
+            OrderProduct.builder()
+                    .product(product)
+                    .order(order)
+                    .build()
+        ).collect(Collectors.toList());
+
+
+        return order;
+    }
+
+    private static int calculateTotalPrice(List<Product> products) {
+        return products.stream().mapToInt(Product::getPrice).sum();
+    }
+
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,10 +56,4 @@ public class Order {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts;
 
-    @Builder
-    private Order(OrderStatus orderStatus, int totalPrice, LocalDateTime orderTime) {
-        this.orderStatus = orderStatus;
-        this.totalPrice = totalPrice;
-        this.orderTime = orderTime;
-    }
 }
