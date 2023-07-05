@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
-import sample.cafekiosk.spring.dto.ProductResponse;
+import sample.cafekiosk.spring.dto.response.ProductResponse;
 import sample.cafekiosk.spring.repository.ProductRepository;
 
 import java.util.List;

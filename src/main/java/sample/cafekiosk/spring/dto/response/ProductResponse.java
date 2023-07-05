@@ -1,9 +1,6 @@
-package sample.cafekiosk.spring.dto;
+package sample.cafekiosk.spring.dto.response;
 
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import sample.cafekiosk.spring.domain.Product;
