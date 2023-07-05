@@ -3,6 +3,7 @@ package sample.cafekiosk.spring.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,15 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Product extends BaseEntity{
 
+
+    @Builder
+    private Product(String productNumber, ProductType type, ProductSellingType sellingType, String name, int price) {
+        this.productNumber = productNumber;
+        this.type = type;
+        this.sellingType = sellingType;
+        this.name = name;
+        this.price = price;
+    }
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
