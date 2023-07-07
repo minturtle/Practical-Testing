@@ -13,6 +13,7 @@ import sample.cafekiosk.spring.repository.ProductRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,16 +29,23 @@ public class OrderService {
         List<String> productNumbers = reqBody.getProductNumberList();
         List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
 
+        // 중복 처리
+        final Map<String, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getProductNumber, p -> p));
+
+        // products의 중복 제거 문제를 해결한 List
+        List<Product> duplicateProducts = productNumbers.stream().map(productMap::get).toList();
+
 
         //Order 객체를 생성한다.
-        Order order = Order.of(products, orderTime);
+        Order order = Order.of(duplicateProducts, orderTime);
 
 
         // Order 객체를 저장한다.
         orderRepository.save(order);
 
         // product -> productResponse로 객체를 변환한다.
-        List<ProductResponse> productResponses = products.stream()
+        List<ProductResponse> productResponses = duplicateProducts.stream()
                 .map(ProductResponse::of).collect(Collectors.toList());
 
 

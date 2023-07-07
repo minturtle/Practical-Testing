@@ -55,7 +55,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("중복해서 같은 상품을 여러개 처리할 수 있다.")
+    @DisplayName("중복해서 같은 상품을 여러개 주문할 수 있다.")
     void t2() throws Exception {
         //given
         List<Product> dummyData = getDummyData();
@@ -70,7 +70,7 @@ class OrderServiceTest {
         //then
         assertThat(order.getId()).isNotNull();
         assertThat(order).extracting("totalPrice", "orderDateTime")
-                .containsExactly(2000, testOrderTime);
+                .containsExactly(7000, testOrderTime);
         assertThat(order.getProducts()).extracting("productNumber")
                 .containsExactly("001", "001");
 
