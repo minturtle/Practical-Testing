@@ -28,8 +28,6 @@ class OrderServiceTest {
     private ProductRepository productRepository;
 
 
-
-
     @Test
     @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
     void t1() throws Exception {
@@ -55,6 +53,29 @@ class OrderServiceTest {
                 .extracting("productNumber")
                 .containsExactlyInAnyOrder("001", "002");
     }
+
+    @Test
+    @DisplayName("중복해서 같은 상품을 여러개 처리할 수 있다.")
+    void t2() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+        productRepository.saveAll(dummyData);
+        OrderCreateRequest reqBody = OrderCreateRequest.builder()
+                .productNumberList(List.of("001", "001"))
+                .build();
+
+        LocalDateTime testOrderTime = LocalDateTime.of(2023, 7, 7, 00, 00);
+        //when
+        OrderResponse order = orderService.createOrder(reqBody, testOrderTime);
+        //then
+        assertThat(order.getId()).isNotNull();
+        assertThat(order).extracting("totalPrice", "orderDateTime")
+                .containsExactly(2000, testOrderTime);
+        assertThat(order.getProducts()).extracting("productNumber")
+                .containsExactly("001", "001");
+
+    }
+
 
 
     private List<Product> getDummyData(){
