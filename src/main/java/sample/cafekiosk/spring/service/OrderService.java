@@ -3,6 +3,7 @@ package sample.cafekiosk.spring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Order;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.dto.request.OrderCreateRequest;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class OrderService {
 
     private final ProductRepository productRepository;
@@ -27,25 +29,18 @@ public class OrderService {
 
         // product number에 해당하는 product들을 모두 찾아온다.
         List<String> productNumbers = reqBody.getProductNumberList();
-        List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
-
-        // 중복 처리
-        final Map<String, Product> productMap = products.stream()
-                .collect(Collectors.toMap(Product::getProductNumber, p -> p));
-
-        // products의 중복 제거 문제를 해결한 List
-        List<Product> duplicateProducts = productNumbers.stream().map(productMap::get).toList();
+        List<Product> products = findProducts(productNumbers);
 
 
         //Order 객체를 생성한다.
-        Order order = Order.of(duplicateProducts, orderTime);
+        Order order = Order.of(products, orderTime);
 
 
         // Order 객체를 저장한다.
         orderRepository.save(order);
 
         // product -> productResponse로 객체를 변환한다.
-        List<ProductResponse> productResponses = duplicateProducts.stream()
+        List<ProductResponse> productResponses = products.stream()
                 .map(ProductResponse::of).collect(Collectors.toList());
 
 
@@ -56,5 +51,19 @@ public class OrderService {
                 .products(productResponses)
                 .totalPrice(order.getTotalPrice())
                 .build();
+    }
+
+
+
+    private List<Product> findProducts(List<String> productNumbers) {
+        List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
+
+        // 중복 처리
+        final Map<String, Product> productMap = products.stream()
+                .collect(Collectors.toMap(Product::getProductNumber, p -> p));
+
+        // products의 중복 제거 문제를 해결한 List
+        List<Product> duplicateProducts = productNumbers.stream().map(productMap::get).toList();
+        return duplicateProducts;
     }
 }
