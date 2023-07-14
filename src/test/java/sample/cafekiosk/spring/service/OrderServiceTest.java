@@ -127,6 +127,24 @@ class OrderServiceTest {
 
     }
 
+    @Test
+    @DisplayName("HANDMADE 타입의 상품은 재고를 가질 수 없다.")
+    void t4() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+
+        //when
+        assertThatThrownBy(()->{
+            Stock stock = Stock.builder()
+                    .stockQuantity(5)
+                    .product(dummyData.get(0))
+                    .build();
+        }).isInstanceOf(IllegalArgumentException.class);
+
+
+        //then
+    }
+
 
 
     private List<Product> getDummyData(){

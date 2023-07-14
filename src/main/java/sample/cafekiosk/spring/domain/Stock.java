@@ -10,6 +10,11 @@ public class Stock {
 
     @Builder
     private Stock(Integer stockQuantity, Product product) {
+
+        if(product.getType() == ProductType.HANDMADE){
+            throw new IllegalArgumentException("HANDMADE는 수량을 측정할 수 없습니다.");
+        }
+
         this.stockQuantity = stockQuantity;
         this.product = product;
     }
