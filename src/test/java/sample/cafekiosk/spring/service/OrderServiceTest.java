@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
@@ -143,6 +144,39 @@ class OrderServiceTest {
 
 
         //then
+    }
+
+    @Test
+    @DisplayName("상품을 주문하면 해당 상품의 재고가 감소한다")
+    void t5() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+        Stock stock = Stock.builder()
+                .stockQuantity(5)
+                .product(dummyData.get(1))
+                .build();
+
+        productRepository.saveAll(dummyData);
+        stockRepository.save(stock);
+
+
+        //when
+
+        OrderCreateRequest orderReq = OrderCreateRequest.builder()
+                .productNumberList(List.of("002", "002"))
+                .build();
+
+        orderService.createOrder(
+                orderReq,
+                LocalDateTime.of(2023, 7, 14, 12, 00
+        ));
+
+        //then
+        final List<Stock> stocks = stockRepository.findAll();
+        assertThat(stocks).hasSize(1)
+                        .extracting("stockQuantity")
+                        .containsExactly(3);
+
     }
 
 

@@ -19,6 +19,17 @@ public class Stock {
         this.product = product;
     }
 
+
+    public void subStock(Integer quantity){
+        this.stockQuantity -= quantity;
+    }
+
+
+    public void addStock(Integer quantity){
+        this.stockQuantity += quantity;
+    }
+
+
     @Id @GeneratedValue
     private Long id;
 

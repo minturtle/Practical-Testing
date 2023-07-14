@@ -31,13 +31,20 @@ public class OrderService {
         List<String> productNumbers = reqBody.getProductNumberList();
         List<Product> products = findProducts(productNumbers);
 
-
         //Order 객체를 생성한다.
         Order order = Order.of(products, orderTime);
 
 
         // Order 객체를 저장한다.
         orderRepository.save(order);
+
+        // 해당 product의 재고를 감소시킨다.
+        for(Product product : products){
+            if(product.getStock() == null){ continue; }
+
+            product.getStock().subStock(1);
+        }
+
 
         // product -> productResponse로 객체를 변환한다.
         List<ProductResponse> productResponses = products.stream()
@@ -54,7 +61,7 @@ public class OrderService {
     }
 
 
-
+    // 중복된 Products Number이 들어와도, 중복해서 같은 객체가 리스트에 담김
     private List<Product> findProducts(List<String> productNumbers) {
         List<Product> products = productRepository.findAllByProductNumberIn(productNumbers);
 
