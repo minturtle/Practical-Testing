@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +25,7 @@ public class Product extends BaseEntity{
         this.price = price;
     }
 
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -38,4 +41,20 @@ public class Product extends BaseEntity{
 
     private int price;
 
+    @OneToOne(mappedBy = "product", orphanRemoval = true, cascade = CascadeType.REMOVE)
+    private Stock stock;
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(productNumber, product.productNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, productNumber);
+    }
 }

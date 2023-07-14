@@ -8,15 +8,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
+import sample.cafekiosk.spring.domain.Stock;
 import sample.cafekiosk.spring.repository.OrderProductRepository;
 import sample.cafekiosk.spring.repository.OrderRepository;
 import sample.cafekiosk.spring.repository.ProductRepository;
 import sample.cafekiosk.spring.dto.request.OrderCreateRequest;
 import sample.cafekiosk.spring.dto.response.OrderResponse;
+import sample.cafekiosk.spring.repository.StockRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,10 +39,13 @@ class OrderServiceTest {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
 
     @AfterEach
     void tearDown() {
         orderProductRepository.deleteAll();
+        stockRepository.deleteAll();
         productRepository.deleteAllInBatch();
         orderRepository.deleteAll();
 
@@ -92,6 +96,34 @@ class OrderServiceTest {
                 .containsExactly(7000, testOrderTime);
         assertThat(order.getProducts()).extracting("productNumber")
                 .containsExactly("001", "001");
+
+    }
+
+    @Test
+    @DisplayName("병 음료와 베이커리는 재고 정보를 가진다.")
+    void t3() throws Exception {
+        //given
+
+        List<Product> dummyData = getDummyData();
+        Stock stock = Stock.builder()
+                .stockQuantity(5)
+                .product(dummyData.get(1))
+                .build();
+        Stock stock2 = Stock.builder()
+                .stockQuantity(3)
+                .product(dummyData.get(2))
+                .build();
+
+        productRepository.saveAll(dummyData);
+        stockRepository.saveAll(List.of(stock, stock2));
+
+        //when
+        List<Product> bottleBakeryProducts = productRepository.findAllByProductNumberIn(List.of("002", "003"));
+        List<Stock> stocks = bottleBakeryProducts.stream().map(Product::getStock).toList();
+
+        //then
+        assertThat(stocks).extracting("stockQuantity", "product")
+                .containsExactly(tuple(5, dummyData.get(1)), tuple(3, dummyData.get(2)));
 
     }
 
