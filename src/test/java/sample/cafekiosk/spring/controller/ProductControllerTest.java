@@ -70,10 +70,12 @@ class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/product/new")
                 .content(objectMapper.writeValueAsString(reqBody))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("UTF-8")
+                .characterEncoding("UTF-8")
         )
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
-
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.detail").isNotEmpty());
         //then
     }
 }

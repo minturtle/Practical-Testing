@@ -1,6 +1,7 @@
 package sample.cafekiosk.spring.controller;
 
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -29,7 +30,7 @@ public class ProductController {
 
 
     @PostMapping("/new")
-    public ResponseEntity addNewProduct(@RequestBody  NewProductRequest productRequest){
+    public ResponseEntity addNewProduct(@RequestBody  @Valid  NewProductRequest productRequest){
 
         final ProductCreationDto creationDto = ProductCreationDto.builder()
                 .productName(productRequest.getProductName())
@@ -49,16 +50,16 @@ public class ProductController {
     @AllArgsConstructor
     @Builder
     public static class NewProductRequest{
-        @NotBlank
+        @NotBlank(message = "상품의 이름은 빈 값일 수 없습니다.")
         private String productName;
 
-        @NotBlank
+        @NotNull(message = "상품 판매 타입은 빈 값일 수 없습니다.")
         private ProductSellingType sellingType;
 
-        @NotBlank
+        @NotNull(message = "상품 타입은 빈 값일 수 없습니다.")
         private ProductType productType;
 
-        @Positive
+        @Positive(message = "가격은 음수일 수 없습니다.")
         private Integer price;
     }
 }
