@@ -12,6 +12,7 @@ import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -70,9 +71,22 @@ class ProductRepositoryTest {
 
         Product expected = dummyData.get(2);
         //when
-        final Product actual = productRepository.findTopByOrderByIdDesc();
+        final Product actual = productRepository.findTopByOrderByIdDesc()
+                .orElseThrow(()->new RuntimeException("값이 저장되어 있지 않습니다."));
         //then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("가장 최근에 저장된 데이터를 가져올 때, 저장된 데이터가 하나도 없다면 Optional.Empty()를 리턴한다.")
+    void t4() throws Exception {
+        //given
+        //when
+        final Optional<Product> expectNull = productRepository.findTopByOrderByIdDesc();
+        //then
+        if(expectNull.isPresent()){
+            fail("반환 값은 null 이어야 합니다.");
+        }
     }
 
 
