@@ -41,6 +41,9 @@ public class OrderService {
         // 해당 product의 재고를 감소시킨다.
         for(Product product : products){
             if(product.getStock() == null){ continue; }
+            if(product.getStock().isQuantityLessThan(1)){
+                throw new IllegalArgumentException(String.format("%s의 재고가 부족합니다.", product.getName()));
+            }
 
             product.getStock().deductStock(1);
         }

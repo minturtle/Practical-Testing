@@ -44,4 +44,11 @@ public class Stock {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public boolean isQuantityLessThan(int reqCount) {
+        if(stockQuantity > reqCount){
+            return false;
+        }
+        return true;
+    }
 }
