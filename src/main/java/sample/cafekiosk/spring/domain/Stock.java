@@ -20,13 +20,13 @@ public class Stock {
     }
 
 
-    public void deductStock(Integer quantity) throws IllegalStateException{
-        if(this.stockQuantity < quantity){
+    public void deductStock(Integer reqCount) throws IllegalStateException{
+        if(isQuantityLessThan(reqCount)){
             throw new IllegalArgumentException("재고가 부족합니다.");
         }
 
 
-        this.stockQuantity -= quantity;
+        this.stockQuantity -= reqCount;
     }
 
 

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
@@ -179,6 +178,30 @@ class OrderServiceTest {
 
     }
 
+
+    @Test
+    @DisplayName("상품을 주문했으나 해당 상품의 재고가 부족하면, 상품의 이름과 함께 예외 메시지를 출력한다")
+    void t6() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+        Stock stock = Stock.builder()
+                .stockQuantity(1)
+                .product(dummyData.get(1))
+                .build();
+
+        productRepository.saveAll(dummyData);
+        stockRepository.save(stock);
+
+        OrderCreateRequest orderReq = OrderCreateRequest.builder()
+                .productNumberList(List.of("001", "002", "002"))
+                .build();
+
+        LocalDateTime now = LocalDateTime.of(2023, 7, 20, 12, 0);
+        //when & then
+        assertThatThrownBy(()->orderService.createOrder(orderReq, now))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("크로와상의 재고가 부족합니다.");
+    }
 
 
     private List<Product> getDummyData(){
