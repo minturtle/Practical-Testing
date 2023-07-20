@@ -4,9 +4,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
+import sample.cafekiosk.spring.dto.ProductCreationDto;
 import sample.cafekiosk.spring.repository.ProductRepository;
 
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class ProductServiceTest {
 
     @Autowired
@@ -33,6 +36,51 @@ class ProductServiceTest {
         Product actual = productService.findLatestProduct();
         //then
         assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    @DisplayName("이미 등록된 상품이 있을때, 등록된 가장 최근의 상품의 상품번호 +1된 신규 상품을 등록할 수 있다.")
+    void t2() throws Exception {
+        //given
+        final List<Product> dummyData = getDummyData();
+        productRepository.saveAll(dummyData);
+
+
+        final ProductCreationDto productCreationDto = ProductCreationDto.builder()
+                .productName("테스트 상품")
+                .productType(ProductType.BAKERY)
+                .sellingType(ProductSellingType.SELLING)
+                .price(10000)
+                .build();
+        //when
+        productService.createProduct(productCreationDto);
+        //then
+        Product latestSavedProduct = productRepository.findTopByOrderByIdDesc()
+                .orElseThrow(()->new RuntimeException("Product 저장에 실패했습니다."));
+
+        assertThat(latestSavedProduct).extracting("productNumber", "name" , "type", "sellingType", "price")
+                .containsExactly("004", "테스트 상품", ProductType.BAKERY, ProductSellingType.SELLING, 10000);
+    }
+
+    @Test
+    @DisplayName("이미 등록된 상품이 없을때, 상품번호가 001인 신규 상품을 등록할 수 있다.")
+    void t3() throws Exception {
+        //given
+
+        final ProductCreationDto productCreationDto = ProductCreationDto.builder()
+                .productName("테스트 상품")
+                .productType(ProductType.BAKERY)
+                .sellingType(ProductSellingType.SELLING)
+                .price(10000)
+                .build();
+        //when
+        productService.createProduct(productCreationDto);
+        //then
+        Product latestSavedProduct = productRepository.findTopByOrderByIdDesc()
+                .orElseThrow(()->new RuntimeException("Product 저장에 실패했습니다."));
+
+        assertThat(latestSavedProduct).extracting("productNumber", "name" , "type", "sellingType", "price")
+                .containsExactly("001", "테스트 상품", ProductType.BAKERY, ProductSellingType.SELLING, 10000);
     }
 
 
