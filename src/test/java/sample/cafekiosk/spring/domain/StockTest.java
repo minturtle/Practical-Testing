@@ -37,7 +37,7 @@ class StockTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"5,3,false", "1,3,true"})
+    @CsvSource(value = {"5,3,false", "1,3,true", "3,3,false"})
     @DisplayName("현재 남아있는 수량이 요청받은 수량보다 작은지 확인할 수 있다.")
     void t3(int stockQuantity, int requestCount, boolean expected) throws Exception {
         //given

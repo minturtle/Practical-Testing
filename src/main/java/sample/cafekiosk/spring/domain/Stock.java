@@ -46,7 +46,7 @@ public class Stock {
     private Product product;
 
     public boolean isQuantityLessThan(int reqCount) {
-        if(stockQuantity > reqCount){
+        if(stockQuantity >= reqCount){
             return false;
         }
         return true;
