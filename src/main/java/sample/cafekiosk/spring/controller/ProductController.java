@@ -24,8 +24,10 @@ public class ProductController {
     private final ProductService productService;
 
     @GetMapping("/selling")
-    public List<ProductResponse> getSellingProducts(){
-        return productService.getSellingProduct();
+    public SellingProductListResponse getSellingProducts(){
+
+        final List<ProductResponse> sellingProducts = productService.getSellingProduct();
+        return new SellingProductListResponse(sellingProducts);
     }
 
 
@@ -61,5 +63,13 @@ public class ProductController {
 
         @Positive(message = "가격은 음수일 수 없습니다.")
         private Integer price;
+    }
+
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public static class SellingProductListResponse{
+        List<ProductResponse> list;
     }
 }

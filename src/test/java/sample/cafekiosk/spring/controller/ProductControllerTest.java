@@ -17,8 +17,10 @@ import sample.cafekiosk.spring.domain.ProductType;
 import sample.cafekiosk.spring.service.ProductService;
 
 import java.nio.charset.Charset;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 
 @WebMvcTest(controllers = ProductController.class)
@@ -66,7 +68,7 @@ class ProductControllerTest {
                 .price(-10000)
                 .productType(null)
                 .build();
-        //when
+        //when & then
         mockMvc.perform(MockMvcRequestBuilders.post("/api/product/new")
                 .content(objectMapper.writeValueAsString(reqBody))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -76,6 +78,21 @@ class ProductControllerTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").isNotEmpty())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.detail").isNotEmpty());
-        //then
+
     }
+
+    @Test
+    @DisplayName("HTTP GET 요청으로 현재 판매중인 상품을 조회할 수 있다.")
+    void t3() throws Exception {
+        //given
+        when(productService.getSellingProduct()).thenReturn(List.of());
+
+        //when & then
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/product/selling"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.list").isArray());
+
+    }
+
 }
