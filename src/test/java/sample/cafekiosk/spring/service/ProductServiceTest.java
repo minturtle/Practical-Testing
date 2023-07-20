@@ -28,7 +28,6 @@ class ProductServiceTest {
         //given
         List<Product> dummyData = getDummyData();
         Product expected = dummyData.get(2);
-
         productRepository.saveAll(dummyData);
         //when
         Product actual = productService.findLatestProduct();
