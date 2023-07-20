@@ -1,6 +1,9 @@
 package sample.cafekiosk.spring.controller;
 
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,9 +49,16 @@ public class ProductController {
     @AllArgsConstructor
     @Builder
     public static class NewProductRequest{
+        @NotBlank
         private String productName;
+
+        @NotBlank
         private ProductSellingType sellingType;
+
+        @NotBlank
         private ProductType productType;
+
+        @Positive
         private Integer price;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -53,6 +54,26 @@ class ProductControllerTest {
         )
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
+    @Test
+    @DisplayName("신규 상품을 등록할때, 빈 값이 들어오거나 가격이 음수가 들어올 수 없다.")
+    void t2() throws Exception {
+        //given
+        ProductController.NewProductRequest reqBody = ProductController.NewProductRequest.builder()
+                .productName(" ")
+                .sellingType(null)
+                .price(-10000)
+                .productType(null)
+                .build();
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/product/new")
+                .content(objectMapper.writeValueAsString(reqBody))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("UTF-8")
+        )
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+
+        //then
     }
 }
