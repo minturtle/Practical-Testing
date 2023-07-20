@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Order;
 import sample.cafekiosk.spring.domain.Product;
+import sample.cafekiosk.spring.domain.ProductType;
 import sample.cafekiosk.spring.dto.request.OrderCreateRequest;
 import sample.cafekiosk.spring.dto.response.OrderResponse;
 import sample.cafekiosk.spring.dto.response.ProductResponse;
@@ -40,7 +41,9 @@ public class OrderService {
 
         // 해당 product의 재고를 감소시킨다.
         for(Product product : products){
-            if(product.getStock() == null){ continue; }
+            if(product.getType().equals(ProductType.HANDMADE)){ continue; }
+            else if(product.getStock() == null){ throw new IllegalStateException("상품의 재고 정보가 설정되어 있지 않습니다.");}
+
             if(product.getStock().isQuantityLessThan(1)){
                 throw new IllegalArgumentException(String.format("%s의 재고가 부족합니다.", product.getName()));
             }

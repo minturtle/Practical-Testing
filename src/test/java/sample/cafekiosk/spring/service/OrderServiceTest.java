@@ -8,6 +8,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
@@ -55,9 +56,17 @@ class OrderServiceTest {
     @DisplayName("주문번호 리스트를 받아 주문을 생성한다.")
     void t1() throws Exception {
         //given
-        final List<Product> dummyData = getDummyData();
-        final LocalDateTime orderTime = LocalDateTime.now();
+        List<Product> dummyData = getDummyData();
+        Stock stock = Stock.builder()
+                .stockQuantity(1)
+                .product(dummyData.get(1))
+                .build();
         productRepository.saveAll(dummyData);
+        stockRepository.save(stock);
+
+
+        final LocalDateTime orderTime = LocalDateTime.now();
+
 
         OrderCreateRequest reqBody = OrderCreateRequest.builder()
                 .productNumberList(List.of("001", "002"))
@@ -146,8 +155,29 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("상품을 주문하면 해당 상품의 재고가 감소한다")
+    @DisplayName("상품이 BAKERY, BOTTLE인데 재고가 설정되지 않은 경우, 재고가 설정되지 않았다는 메시지와 함께 예외가 출력된다.")
     void t5() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+
+
+        productRepository.saveAll(dummyData);
+        //when &then
+        OrderCreateRequest orderReq = OrderCreateRequest.builder()
+                .productNumberList(List.of("002", "002"))
+                .build();
+        final LocalDateTime testTime = LocalDateTime.of(2023, 7, 20, 12, 0);
+
+        assertThatThrownBy(()->orderService.createOrder(orderReq, testTime))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("상품의 재고 정보가 설정되어 있지 않습니다.");
+
+    }
+
+
+    @Test
+    @DisplayName("상품을 주문하면 해당 상품의 재고가 감소한다")
+    void t6() throws Exception {
         //given
         List<Product> dummyData = getDummyData();
         Stock stock = Stock.builder()
@@ -181,7 +211,7 @@ class OrderServiceTest {
 
     @Test
     @DisplayName("상품을 주문했으나 해당 상품의 재고가 부족하면, 상품의 이름과 함께 예외 메시지를 출력한다")
-    void t6() throws Exception {
+    void t7() throws Exception {
         //given
         List<Product> dummyData = getDummyData();
         Stock stock = Stock.builder()
