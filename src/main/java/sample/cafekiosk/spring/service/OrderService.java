@@ -42,7 +42,7 @@ public class OrderService {
         for(Product product : products){
             if(product.getStock() == null){ continue; }
 
-            product.getStock().subStock(1);
+            product.getStock().deductStock(1);
         }
 
 

@@ -20,7 +20,12 @@ public class Stock {
     }
 
 
-    public void subStock(Integer quantity){
+    public void deductStock(Integer quantity) throws IllegalStateException{
+        if(this.stockQuantity < quantity){
+            throw new IllegalArgumentException("재고가 부족합니다.");
+        }
+
+
         this.stockQuantity -= quantity;
     }
 
