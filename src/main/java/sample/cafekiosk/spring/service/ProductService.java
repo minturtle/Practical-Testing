@@ -25,6 +25,6 @@ public class ProductService {
 
 
     public Product findLatestProduct() {
-        return productRepository.findLatestProducts(Pageable.ofSize(1)).get(0);
+        return productRepository.findTopByOrderByIdDesc();
     }
 }

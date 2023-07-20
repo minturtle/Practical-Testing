@@ -62,7 +62,7 @@ class ProductRepositoryTest {
     }
 
     @Test
-    @DisplayName("가장 최근에 저장된 N개의 데이터를 가져올 수 있다.")
+    @DisplayName("가장 최근에 저장된 데이터를 가져올 수 있다.")
     void t3() throws Exception {
         //given
         List<Product> dummyData = getDummyData();
@@ -70,7 +70,7 @@ class ProductRepositoryTest {
 
         Product expected = dummyData.get(2);
         //when
-        final Product actual = productRepository.findLatestProducts(PageRequest.of(0, 1)).get(0);
+        final Product actual = productRepository.findTopByOrderByIdDesc();
         //then
         assertThat(actual).isEqualTo(expected);
     }
