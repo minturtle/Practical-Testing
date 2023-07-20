@@ -3,6 +3,7 @@ package sample.cafekiosk.spring.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 
 
-
+@ActiveProfiles("test")
 public class OrderTest {
 
     @Test
