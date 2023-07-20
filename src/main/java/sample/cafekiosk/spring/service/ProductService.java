@@ -2,6 +2,7 @@ package sample.cafekiosk.spring.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
@@ -22,4 +23,8 @@ public class ProductService {
         return products.stream().map(ProductResponse::of).collect(Collectors.toList());
     }
 
+
+    public Product findLatestProduct() {
+        return productRepository.findLatestProducts(Pageable.ofSize(1)).get(0);
+    }
 }

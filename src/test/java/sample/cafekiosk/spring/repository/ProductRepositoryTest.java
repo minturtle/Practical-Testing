@@ -4,7 +4,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.domain.Product;
 import sample.cafekiosk.spring.domain.ProductSellingType;
 import sample.cafekiosk.spring.domain.ProductType;
@@ -15,6 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")
+@Transactional
 class ProductRepositoryTest {
 
     @Autowired
@@ -58,6 +61,21 @@ class ProductRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("가장 최근에 저장된 N개의 데이터를 가져올 수 있다.")
+    void t3() throws Exception {
+        //given
+        List<Product> dummyData = getDummyData();
+        productRepository.saveAll(dummyData);
+
+        Product expected = dummyData.get(2);
+        //when
+        final Product actual = productRepository.findLatestProducts(PageRequest.of(0, 1)).get(0);
+        //then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+
     private List<Product> getDummyData(){
         Product product1 = Product.builder()
                 .productNumber("001")
@@ -84,4 +102,5 @@ class ProductRepositoryTest {
                 .build();
         return List.of(product1, product2, product3);
     }
+
 }
